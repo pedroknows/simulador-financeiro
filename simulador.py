@@ -12,6 +12,18 @@ def gerar_tabela_price(valor, taxa_mensal, meses):
     for i in range(1, meses + 1):
         juros_total = (valor * taxa_mensal).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
         amortizacao = (valor_parcela - juros_total)
-        lista_valores.append({"mes":i, "saldo_inicial":valor, "juros":juros_total, "amortizacao":amortizacao, "parcela":valor_parcela, "saldo_final":valor - amortizacao})
+        saldo_remanescente = valor - amortizacao
+        if i == meses:
+            valor_parcela += saldo_remanescente
+            amortizacao += saldo_remanescente
+            saldo_remanescente = Decimal("0")
+                
+
+        lista_valores.append({"mes":i,
+                               "saldo_inicial":valor,
+                                 "juros":juros_total,
+                                   "amortizacao":amortizacao,
+                                     "parcela":valor_parcela,
+                                       "saldo_final":saldo_remanescente})
         valor -= amortizacao
     return lista_valores
